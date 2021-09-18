@@ -1,34 +1,39 @@
-import fs from 'fs';
+import fs from "fs";
 import {
   newProductI,
   ProductI,
   ProductBaseClass,
   ProductQuery,
-} from '../products.interface';
+} from "../products.interface";
 
 export class ProductosFSDAO implements ProductBaseClass {
   private productos: ProductI[] = [];
   private nombreArchivo: string;
 
   constructor(fileName: string) {
-    const mockData = [
-      { _id: '1', nombre: 'lapiz', precio: 200 },
-      { _id: '2', nombre: 'cartuchera', precio: 250 },
-      { _id: '3', nombre: 'boligoma', precio: 260 },
-    ];
+    //const mockData = [
+    //  { _id: "1", nombre: "lapiz", precio: 200 },
+    //  { _id: "2", nombre: "cartuchera", precio: 250 },
+    //  { _id: "3", nombre: "boligoma", precio: 260 },
+    //];
     this.nombreArchivo = fileName;
-    this.productos = mockData;
-    this.guardar();
+    this.leer(this.nombreArchivo);
   }
 
   async leer(archivo: string): Promise<void> {
-    this.productos = JSON.parse(await fs.promises.readFile(archivo, 'utf-8'));
+    //Lee el archivo json, si no lo encuentra, crea uno vacio.
+    try {
+      this.productos = JSON.parse(await fs.promises.readFile(archivo, "utf-8"));
+    } catch (err) {
+      await fs.promises.writeFile(this.nombreArchivo, JSON.stringify([]));
+      this.productos = JSON.parse(await fs.promises.readFile(archivo, "utf-8"));
+    }
   }
 
   async guardar(): Promise<void> {
     await fs.promises.writeFile(
       this.nombreArchivo,
-      JSON.stringify(this.productos, null, '\t')
+      JSON.stringify(this.productos, null, "\t")
     );
   }
 
@@ -37,11 +42,18 @@ export class ProductosFSDAO implements ProductBaseClass {
     return this.productos.findIndex((aProduct: ProductI) => aProduct._id == id);
   }
 
-  async find(id: string): Promise<ProductI | undefined> {
-    await this.leer(this.nombreArchivo);
-
-    return this.productos.find((aProduct) => aProduct._id === id);
+  async findLastId(): Promise<number> {
+    if (this.productos.length == 0) {
+      return 0;
+    }
+    return parseInt(this.productos[this.productos.length - 1]._id);
   }
+
+  //async find(id: string): Promise<ProductI | undefined> {
+  //  await this.leer(this.nombreArchivo);
+  //
+  //  return this.productos.find((aProduct) => aProduct._id === id);
+  //}
 
   async get(id?: string): Promise<ProductI[]> {
     await this.leer(this.nombreArchivo);
@@ -53,14 +65,20 @@ export class ProductosFSDAO implements ProductBaseClass {
   }
 
   async add(data: newProductI): Promise<ProductI> {
-    if (!data.nombre || !data.precio) throw new Error('invalid data');
+    if (!data.nombre || !data.precio) throw new Error("invalid data");
 
     await this.leer(this.nombreArchivo);
 
+    let thumbnail = "";
+    if (data.thumbnail) {
+      thumbnail = data.thumbnail;
+    }
+
     const newItem: ProductI = {
-      _id: (this.productos.length + 1).toString(),
+      _id: ((await this.findLastId()) + 1).toString(),
       nombre: data.nombre,
       precio: data.precio,
+      thumbnail: thumbnail,
     };
 
     this.productos.push(newItem);

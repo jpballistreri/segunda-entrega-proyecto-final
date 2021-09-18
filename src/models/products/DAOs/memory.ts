@@ -14,15 +14,15 @@ export class ProductosMemDAO implements ProductBaseClass {
     mockData.forEach((aMock) => this.productos.push(aMock));
   }
 
-  findIndex(id: string) {
+  async findIndex(id: string) {
     return this.productos.findIndex((aProduct) => aProduct._id == id);
   }
 
-  find(id: string): ProductI | undefined {
-    return this.productos.find((aProduct) => aProduct._id === id);
-  }
+  //find(id: string): ProductI | undefined {
+  //  return this.productos.find((aProduct) => aProduct._id === id);
+  //}
 
-  findLastId(): number {
+  async findLastId(): Promise<number> {
     if (this.productos.length == 0) {
       return 0;
     }
@@ -44,7 +44,7 @@ export class ProductosMemDAO implements ProductBaseClass {
     }
 
     const newItem: ProductI = {
-      _id: (this.findLastId() + 1).toString(),
+      _id: ((await this.findLastId()) + 1).toString(),
       nombre: data.nombre,
       precio: data.precio,
       thumbnail: thumbnail,
@@ -56,7 +56,7 @@ export class ProductosMemDAO implements ProductBaseClass {
   }
 
   async update(id: string, newProductData: newProductI): Promise<ProductI> {
-    const index = this.findIndex(id);
+    const index = await this.findIndex(id);
     const oldProduct = this.productos[index];
 
     const updatedProduct: ProductI = { ...oldProduct, ...newProductData };
@@ -65,7 +65,7 @@ export class ProductosMemDAO implements ProductBaseClass {
   }
 
   async delete(id: string): Promise<void> {
-    const index = this.findIndex(id);
+    const index = await this.findIndex(id);
     this.productos.splice(index, 1);
   }
 
