@@ -10,6 +10,8 @@ const venv = {
   MONGO_LOCAL_DBNAME: process.env.MONGO_LOCAL_DBNAME || "dbNameLocal",
   FILE_SYSTEM_PERSISTENCIA:
     process.env.FILE_SYSTEM_PERSISTENCIA || "url json file",
+  MONGO_LOCAL_IP: process.env.MONGO_LOCAL_IP || "localhost",
+  MONGO_LOCAL_PORT: process.env.MONGO_LOCAL_PORT || "27017",
 };
 
 export default venv;

@@ -6,7 +6,7 @@ import { ProductQuery } from "../models/products/products.interface";
 /**
  * Con esta variable elegimos el tipo de persistencia
  */
-const tipo = TipoPersistencia.FileSystem;
+const tipo = TipoPersistencia.LocalMongo;
 
 class prodAPI {
   private productos;

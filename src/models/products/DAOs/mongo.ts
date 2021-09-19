@@ -1,15 +1,16 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 import {
   newProductI,
   ProductI,
   ProductBaseClass,
   ProductQuery,
-} from '../products.interface';
-import Config from '../../../config';
+} from "../products.interface";
+import Config from "../../../config";
 
 const productsSchema = new mongoose.Schema<ProductI>({
   nombre: String,
   precio: Number,
+  thumbnail: String,
 });
 
 export class ProductosAtlasDAO implements ProductBaseClass {
@@ -18,11 +19,11 @@ export class ProductosAtlasDAO implements ProductBaseClass {
 
   constructor(local: boolean = false) {
     if (local)
-      this.srv = `mongodb://localhost:27017/${Config.MONGO_LOCAL_DBNAME}`;
+      this.srv = `mongodb://${Config.MONGO_LOCAL_IP}:${Config.MONGO_LOCAL_PORT}/${Config.MONGO_LOCAL_DBNAME}`;
     else
       this.srv = `mongodb+srv://${Config.MONGO_ATLAS_USER}:${Config.MONGO_ATLAS_PASSWORD}@${Config.MONGO_ATLAS_CLUSTER}/${Config.MONGO_ATLAS_DBNAME}?retryWrites=true&w=majority`;
     mongoose.connect(this.srv);
-    this.productos = mongoose.model<ProductI>('producto', productsSchema);
+    this.productos = mongoose.model<ProductI>("producto", productsSchema);
   }
 
   async get(id?: string): Promise<ProductI[]> {
@@ -42,7 +43,7 @@ export class ProductosAtlasDAO implements ProductBaseClass {
   }
 
   async add(data: newProductI): Promise<ProductI> {
-    if (!data.nombre || !data.precio) throw new Error('invalid data');
+    if (!data.nombre || !data.precio) throw new Error("invalid data");
 
     const newProduct = new this.productos(data);
     await newProduct.save();
