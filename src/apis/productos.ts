@@ -6,7 +6,7 @@ import { ProductQuery } from "../models/products/products.interface";
 /**
  * Con esta variable elegimos el tipo de persistencia
  */
-const tipo = TipoPersistencia.Memoria;
+const tipo = TipoPersistencia.FileSystem;
 
 class prodAPI {
   private productos;
