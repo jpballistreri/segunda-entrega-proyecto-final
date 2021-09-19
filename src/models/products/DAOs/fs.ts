@@ -5,6 +5,7 @@ import {
   ProductBaseClass,
   ProductQuery,
 } from "../products.interface";
+import moment from "moment";
 
 export class ProductosFSDAO implements ProductBaseClass {
   private productos: ProductI[] = [];
@@ -68,20 +69,28 @@ export class ProductosFSDAO implements ProductBaseClass {
   }
 
   async add(data: newProductI): Promise<ProductI> {
-    if (!data.nombre || !data.precio) throw new Error("invalid data");
-
+    if (
+      !data.nombre ||
+      !data.descripcion ||
+      !data.codigo ||
+      !data.foto ||
+      !data.precio ||
+      !data.stock ||
+      typeof data.nombre !== "string" ||
+      isNaN(data.precio)
+    )
+      throw new Error("invalid data");
     await this.leer(this.nombreArchivo);
-
-    let thumbnail = "";
-    if (data.thumbnail) {
-      thumbnail = data.thumbnail;
-    }
 
     const newItem: ProductI = {
       _id: ((await this.findLastId()) + 1).toString(),
+      timestamp: moment().format(),
       nombre: data.nombre,
+      descripcion: data.descripcion,
+      codigo: data.codigo,
+      foto: data.foto,
       precio: data.precio,
-      thumbnail: thumbnail,
+      stock: data.stock,
     };
 
     this.productos.push(newItem);

@@ -4,12 +4,24 @@ import {
   ProductBaseClass,
   ProductQuery,
 } from "../products.interface";
+import moment from "moment";
 
 export class ProductosMemDAO implements ProductBaseClass {
   private productos: ProductI[] = [];
 
   constructor() {
-    const mockData: [] = [];
+    const mockData = [
+      {
+        _id: "0",
+        timestamp: "0",
+        nombre: "pizza test",
+        descripcion: "muzarella",
+        codigo: "muzza",
+        foto: "muzza.png",
+        precio: 600,
+        stock: 100,
+      },
+    ];
 
     mockData.forEach((aMock) => this.productos.push(aMock));
   }
@@ -37,17 +49,27 @@ export class ProductosMemDAO implements ProductBaseClass {
   }
 
   async add(data: newProductI): Promise<ProductI> {
-    if (!data.nombre || !data.precio) throw new Error("invalid data");
-    let thumbnail = "";
-    if (data.thumbnail) {
-      thumbnail = data.thumbnail;
-    }
+    if (
+      !data.nombre ||
+      !data.descripcion ||
+      !data.codigo ||
+      !data.foto ||
+      !data.precio ||
+      !data.stock ||
+      typeof data.nombre !== "string" ||
+      isNaN(data.precio)
+    )
+      throw new Error("invalid data");
 
     const newItem: ProductI = {
       _id: ((await this.findLastId()) + 1).toString(),
+      timestamp: moment().format(),
       nombre: data.nombre,
+      descripcion: data.descripcion,
+      codigo: data.codigo,
+      foto: data.foto,
       precio: data.precio,
-      thumbnail: thumbnail,
+      stock: data.stock,
     };
 
     this.productos.push(newItem);
@@ -73,11 +95,25 @@ export class ProductosMemDAO implements ProductBaseClass {
     type Conditions = (aProduct: ProductI) => boolean;
     const query: Conditions[] = [];
 
-    if (options.nombre)
-      query.push((aProduct: ProductI) => aProduct.nombre == options.nombre);
-
+    if (options.nombre) {
+      let nombre = options.nombre;
+      query.push((aProduct: ProductI) => aProduct.nombre.includes(nombre));
+    }
     if (options.precio)
       query.push((aProduct: ProductI) => aProduct.precio == options.precio);
+
+    if (options.stock)
+      query.push((aProduct: ProductI) => aProduct.stock == options.stock);
+
+    if (options.precioMin) {
+      let precioMin = options.precioMin;
+      query.push((aProduct: ProductI) => aProduct.precio >= precioMin);
+    }
+
+    if (options.precioMax) {
+      let precioMax = options.precioMax;
+      query.push((aProduct: ProductI) => aProduct.precio <= precioMax);
+    }
 
     return this.productos.filter((aProduct) => query.every((x) => x(aProduct)));
   }

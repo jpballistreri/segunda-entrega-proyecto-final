@@ -10,7 +10,7 @@ import Config from "../../../config";
 const productsSchema = new mongoose.Schema<ProductI>({
   nombre: String,
   precio: Number,
-  thumbnail: String,
+  descripcion: String,
 });
 
 export class ProductosAtlasDAO implements ProductBaseClass {
