@@ -1,6 +1,7 @@
 import { ProductosMemDAO } from "./DAOs/memory";
 import { ProductosFSDAO } from "./DAOs/fs";
 import { ProductosAtlasDAO } from "./DAOs/mongo";
+import Config from "../../config";
 
 import path from "path";
 export enum TipoPersistencia {
@@ -18,7 +19,10 @@ export class FactoryDAO {
     switch (tipo) {
       case TipoPersistencia.FileSystem:
         console.log("RETORNANDO INSTANCIA CLASE FS");
-        const filePath = path.resolve(__dirname, "./DAOs/products.json");
+        const filePath = path.resolve(
+          __dirname,
+          Config.FILE_SYSTEM_PERSISTENCIA
+        );
         console.log(filePath);
         return new ProductosFSDAO(filePath);
 

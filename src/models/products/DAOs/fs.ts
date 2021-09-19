@@ -25,6 +25,9 @@ export class ProductosFSDAO implements ProductBaseClass {
     try {
       this.productos = JSON.parse(await fs.promises.readFile(archivo, "utf-8"));
     } catch (err) {
+      console.log(
+        "Archivo products.json no encontrado\nCreando archivo products.json"
+      );
       await fs.promises.writeFile(this.nombreArchivo, JSON.stringify([]));
       this.productos = JSON.parse(await fs.promises.readFile(archivo, "utf-8"));
     }
