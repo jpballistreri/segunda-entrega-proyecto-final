@@ -23,8 +23,9 @@ export interface ProductQuery {
   nombre?: string;
   precio?: number;
   stock?: number;
-  precioMin?: number | undefined;
-  precioMax?: number | undefined;
+  precioMin?: number;
+  precioMax?: number;
+  stockMin?: number;
 }
 
 export interface ProductBaseClass {

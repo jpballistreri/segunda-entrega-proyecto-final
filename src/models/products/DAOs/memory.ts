@@ -12,14 +12,34 @@ export class ProductosMemDAO implements ProductBaseClass {
   constructor() {
     const mockData = [
       {
-        _id: "0",
-        timestamp: "0",
-        nombre: "pizza test",
-        descripcion: "muzarella",
+        _id: "1",
+        timestamp: "2021-09-19T12:04:09-03:00",
+        nombre: "pizza muzarella",
+        descripcion: "pizza de salsa de tomate y muzarella",
         codigo: "muzza",
         foto: "muzza.png",
         precio: 600,
-        stock: 100,
+        stock: 500,
+      },
+      {
+        _id: "2",
+        timestamp: "2021-09-19T12:20:09-03:00",
+        nombre: "pizza fugazzetta",
+        descripcion: "pizza de cebolla y muzarrella",
+        codigo: "fugazz",
+        foto: "fugazzetta.png",
+        precio: 700,
+        stock: 300,
+      },
+      {
+        _id: "3",
+        timestamp: "2021-09-19T12:23:09-03:00",
+        nombre: "empanada de carne",
+        descripcion: "empanada de carne picada fina",
+        codigo: "emp_carne",
+        foto: "empanadacarne.png",
+        precio: 100,
+        stock: 1000,
       },
     ];
 
@@ -102,9 +122,6 @@ export class ProductosMemDAO implements ProductBaseClass {
     if (options.precio)
       query.push((aProduct: ProductI) => aProduct.precio == options.precio);
 
-    if (options.stock)
-      query.push((aProduct: ProductI) => aProduct.stock == options.stock);
-
     if (options.precioMin) {
       let precioMin = options.precioMin;
       query.push((aProduct: ProductI) => aProduct.precio >= precioMin);
@@ -113,6 +130,13 @@ export class ProductosMemDAO implements ProductBaseClass {
     if (options.precioMax) {
       let precioMax = options.precioMax;
       query.push((aProduct: ProductI) => aProduct.precio <= precioMax);
+    }
+    if (options.stock)
+      query.push((aProduct: ProductI) => aProduct.stock == options.stock);
+
+    if (options.stockMin) {
+      let stockMin = options.stockMin;
+      query.push((aProduct: ProductI) => aProduct.stock >= stockMin);
     }
 
     return this.productos.filter((aProduct) => query.every((x) => x(aProduct)));
