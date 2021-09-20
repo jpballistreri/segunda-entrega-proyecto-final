@@ -82,6 +82,10 @@ export class ProductosAtlasDAO implements ProductBaseClass {
       match.codigo = { $regex: options.codigo };
     }
 
+    if (options.timestamp) {
+      match.timestamp = { $regex: options.timestamp };
+    }
+
     if (options.precioMin) {
       if (!match.precio) {
         match.precio = { $gte: options.precioMin };

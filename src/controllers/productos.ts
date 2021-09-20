@@ -41,6 +41,7 @@ class Producto {
     const {
       nombre,
       descripcion,
+      timestamp,
       codigo,
       precio,
       precioMin,
@@ -64,6 +65,7 @@ class Producto {
     const query: ProductQuery = {};
 
     if (nombre) query.nombre = nombre.toString();
+    if (timestamp) query.timestamp = timestamp.toString();
     if (descripcion) query.descripcion = descripcion.toString();
     if (codigo) query.codigo = codigo.toString();
     if (precio) query.precio = Number(precio);
