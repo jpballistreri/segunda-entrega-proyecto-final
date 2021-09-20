@@ -165,8 +165,17 @@ export class ProductosFSDAO implements ProductBaseClass {
       let nombre = options.nombre;
       query.push((aProduct: ProductI) => aProduct.nombre.includes(nombre));
     }
+
+    if (options.descripcion) {
+      let descripcion = options.descripcion;
+      query.push((aProduct: ProductI) =>
+        aProduct.descripcion.includes(descripcion)
+      );
+    }
+
     if (options.precio)
       query.push((aProduct: ProductI) => aProduct.precio == options.precio);
+
     if (options.precioMin) {
       let precioMin = options.precioMin;
       query.push((aProduct: ProductI) => aProduct.precio >= precioMin);
@@ -176,6 +185,7 @@ export class ProductosFSDAO implements ProductBaseClass {
       let precioMax = options.precioMax;
       query.push((aProduct: ProductI) => aProduct.precio <= precioMax);
     }
+
     if (options.stock)
       query.push((aProduct: ProductI) => aProduct.stock == options.stock);
 
@@ -183,6 +193,12 @@ export class ProductosFSDAO implements ProductBaseClass {
       let stockMin = options.stockMin;
       query.push((aProduct: ProductI) => aProduct.stock >= stockMin);
     }
+
+    if (options.stockMax) {
+      let stockMax = options.stockMax;
+      query.push((aProduct: ProductI) => aProduct.stock <= stockMax);
+    }
+
     return this.productos.filter((aProduct) => query.every((x) => x(aProduct)));
   }
 }
