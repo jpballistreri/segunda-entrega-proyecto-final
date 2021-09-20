@@ -15,17 +15,19 @@ export interface ProductI {
   descripcion: string;
   codigo: string;
   foto: string;
-  precio: number;
+  precio: number | string;
   stock: number;
 }
 
 export interface ProductQuery {
   nombre?: string;
+  descripcion?: string;
   precio?: number;
-  stock?: number;
   precioMin?: number;
   precioMax?: number;
+  stock?: number;
   stockMin?: number;
+  stockMax?: number;
 }
 
 export interface ProductBaseClass {

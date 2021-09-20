@@ -8,9 +8,13 @@ import {
 import Config from "../../../config";
 
 const productsSchema = new mongoose.Schema<ProductI>({
+  timestamp: String,
   nombre: String,
-  precio: Number,
   descripcion: String,
+  codigo: String,
+  foto: String,
+  precio: Number,
+  stock: Number,
 });
 
 export class ProductosAtlasDAO implements ProductBaseClass {
@@ -62,10 +66,63 @@ export class ProductosAtlasDAO implements ProductBaseClass {
   async query(options: ProductQuery): Promise<ProductI[]> {
     let query: ProductQuery = {};
 
-    if (options.nombre) query.nombre = options.nombre;
+    let match: any = {};
 
-    if (options.precio) query.precio = options.precio;
+    if (options.nombre) {
+      console.log("nombre..");
+      match.nombre = { $regex: options.nombre };
+    }
 
-    return this.productos.find(query);
+    if (options.descripcion) {
+      console.log("descripcion");
+      let descripcion = options.descripcion;
+      match.descripcion = { $regex: descripcion };
+    }
+
+    if (options.precioMin) {
+      if (!match.precio) {
+        match.precio = { $gte: options.precioMin };
+      } else {
+        match.precio["$gte"] = options.precioMin;
+      }
+    }
+
+    if (options.precioMax) {
+      if (!match.precio) {
+        match.precio = { $lte: options.precioMax };
+      } else {
+        match.precio["$lte"] = options.precioMax;
+      }
+    }
+
+    if (options.precio) {
+      match.precio = options.precio;
+    }
+
+    if (options.stockMin) {
+      if (!match.stock) {
+        match.stock = { $gte: options.stockMin };
+      } else {
+        match.stock["$gte"] = options.stockMin;
+      }
+    }
+
+    if (options.stockMax) {
+      if (!match.stock) {
+        match.stock = { $lte: options.stockMax };
+      } else {
+        match.stock["$lte"] = options.stockMax;
+      }
+    }
+
+    if (options.stock) {
+      match.stock = options.stock;
+    }
+
+    return this.productos.aggregate([
+      {
+        $match: match,
+      },
+    ]);
   }
 }
