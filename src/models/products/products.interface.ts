@@ -39,3 +39,5 @@ export interface ProductBaseClass {
   delete(id: string): Promise<void>;
   query(options: ProductQuery): Promise<ProductI[]>;
 }
+
+export interface ProductTestClass {}
