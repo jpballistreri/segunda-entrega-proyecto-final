@@ -74,9 +74,11 @@ export class ProductosAtlasDAO implements ProductBaseClass {
     }
 
     if (options.descripcion) {
-      console.log("descripcion");
-      let descripcion = options.descripcion;
-      match.descripcion = { $regex: descripcion };
+      match.descripcion = { $regex: options.descripcion };
+    }
+
+    if (options.codigo) {
+      match.codigo = { $regex: options.codigo };
     }
 
     if (options.precioMin) {

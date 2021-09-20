@@ -127,6 +127,11 @@ export class ProductosMemDAO implements ProductBaseClass {
       );
     }
 
+    if (options.codigo) {
+      let codigo = options.codigo;
+      query.push((aProduct: ProductI) => aProduct.codigo.includes(codigo));
+    }
+
     if (options.precio)
       query.push((aProduct: ProductI) => aProduct.precio == options.precio);
 

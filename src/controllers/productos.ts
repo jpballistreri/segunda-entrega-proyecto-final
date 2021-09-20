@@ -41,6 +41,7 @@ class Producto {
     const {
       nombre,
       descripcion,
+      codigo,
       precio,
       precioMin,
       precioMax,
@@ -64,6 +65,7 @@ class Producto {
 
     if (nombre) query.nombre = nombre.toString();
     if (descripcion) query.descripcion = descripcion.toString();
+    if (codigo) query.codigo = codigo.toString();
     if (precio) query.precio = Number(precio);
     if (precioMin) query.precioMin = Number(precioMin);
     if (precioMax) query.precioMax = Number(precioMax);

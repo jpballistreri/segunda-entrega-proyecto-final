@@ -22,6 +22,7 @@ export interface ProductI {
 export interface ProductQuery {
   nombre?: string;
   descripcion?: string;
+  codigo?: string;
   precio?: number;
   precioMin?: number;
   precioMax?: number;
