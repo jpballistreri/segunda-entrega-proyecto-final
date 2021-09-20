@@ -6,6 +6,7 @@ import {
   ProductQuery,
 } from "../products.interface";
 import Config from "../../../config";
+import moment from "moment";
 
 const productsSchema = new mongoose.Schema<ProductI>({
   timestamp: String,
@@ -48,7 +49,7 @@ export class ProductosAtlasDAO implements ProductBaseClass {
 
   async add(data: newProductI): Promise<ProductI> {
     if (!data.nombre || !data.precio) throw new Error("invalid data");
-
+    data.timestamp = moment().format();
     const newProduct = new this.productos(data);
     await newProduct.save();
 
