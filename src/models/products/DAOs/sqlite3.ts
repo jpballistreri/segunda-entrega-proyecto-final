@@ -43,12 +43,11 @@ export class ProductosSqlite3DAO implements ProductTestClass {
   async get(id?: string): Promise<ProductI[] | undefined> {
     let output: ProductI[] = [];
 
-    if (id) {
-      if (id) output = this.connection("productos").where("id", id);
-      else {
-        output = this.connection("productos");
-      }
-      return output;
+    if (id) output = this.connection("productos").where("id", id);
+    else {
+      output = this.connection("productos");
     }
+    console.log(output);
+    return output;
   }
 }
