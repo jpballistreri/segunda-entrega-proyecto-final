@@ -97,19 +97,18 @@ export class ProductosSqlite3DAO implements ProductTestClass {
     data.timestamp = moment().format();
 
     const insertNuevoProducto = async () => {
-      const id = this.connection("productos").insert(data);
+      const id = await this.connection("productos").insert(data);
 
-      return id;
+      return await this.connection("productos").where("id", await id);
     };
 
     const nuevoProducto = async () => {
-      const resultado = await this.connection("productos").where(
+      return await this.connection("productos").where(
         "id",
         await insertNuevoProducto()
       );
-      return resultado;
     };
 
-    return await nuevoProducto();
+    return await insertNuevoProducto();
   }
 }
