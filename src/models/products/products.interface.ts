@@ -19,6 +19,17 @@ export interface ProductI {
   stock: number;
 }
 
+export interface ProductSqlI {
+  id: string;
+  timestamp: string;
+  nombre: string;
+  descripcion: string;
+  codigo: string;
+  foto: string;
+  precio: number | string;
+  stock: number;
+}
+
 export interface ProductQuery {
   nombre?: string;
   descripcion?: string;
