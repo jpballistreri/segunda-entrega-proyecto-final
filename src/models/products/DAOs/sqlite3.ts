@@ -4,6 +4,7 @@ import {
   ProductI,
   ProductBaseClass,
   ProductQuery,
+  ProductSqlI,
   ProductTestClass,
 } from "../products.interface";
 import Config from "../../../config";
@@ -17,7 +18,7 @@ export class ProductosSqlite3DAO implements ProductTestClass {
   private connection;
 
   constructor() {
-    const mockData = [
+    const mockData: newProductI[] = [
       {
         timestamp: "0000",
         nombre: "Pizza Muzzarella",
@@ -82,33 +83,43 @@ export class ProductosSqlite3DAO implements ProductTestClass {
     });
   }
 
-  async get(id?: string): Promise<ProductI[] | undefined> {
-    let output: ProductI[] = [];
+  async get(id?: string): Promise<ProductSqlI[]> {
+    let output: ProductSqlI[] = [];
 
-    if (id) output = this.connection("productos").where("id", id);
+    if (id) output = await this.connection("productos").where("id", id);
     else {
-      output = this.connection("productos");
+      output = await this.connection("productos");
     }
     //console.log(output);
     return output;
   }
 
-  async add(data: newProductI): Promise<ProductI> {
+  async add(data: newProductI): Promise<ProductSqlI[]> {
     data.timestamp = moment().format();
 
-    const insertNuevoProducto = async () => {
+    const insertData = async (): Promise<ProductSqlI[]> => {
       const id = await this.connection("productos").insert(data);
-
-      return await this.connection("productos").where("id", await id);
-    };
-
-    const nuevoProducto = async () => {
-      return await this.connection("productos").where(
+      const insert: ProductSqlI[] = await this.connection("productos").where(
         "id",
-        await insertNuevoProducto()
+        id
       );
+      console.log(insert);
+      return insert;
     };
 
-    return await insertNuevoProducto();
+    return await insertData();
+  }
+
+  async update(id: string, data: newProductI): Promise<ProductSqlI> {
+    const updateData = async (): Promise<ProductSqlI> => {
+      await this.connection("productos").where("id", id).update(data);
+      const nuevoProducto: ProductSqlI = await this.connection(
+        "productos"
+      ).where("id", id);
+
+      return nuevoProducto;
+    };
+
+    return await updateData();
   }
 }

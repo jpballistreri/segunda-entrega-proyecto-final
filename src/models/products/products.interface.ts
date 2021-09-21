@@ -21,13 +21,13 @@ export interface ProductI {
 
 export interface ProductSqlI {
   id: string;
-  timestamp: string;
   nombre: string;
   descripcion: string;
   codigo: string;
   foto: string;
   precio: number | string;
   stock: number;
+  timestamp: string;
 }
 
 export interface ProductQuery {
