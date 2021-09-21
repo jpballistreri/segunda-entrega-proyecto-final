@@ -97,6 +97,16 @@ export class ProductosSqlite3DAO implements ProductTestClass {
     data.timestamp = moment().format();
 
     console.log(data);
+    let newProduct: ProductI;
+
+    //this.connection("productos")
+    //  .insert(data)
+    //  .then((id) => {
+    //    console.log(id)
+    //
+    //    ;
+    //  });
+    // this.connection("productos").where("id").insert(data)
     return this.connection("productos").insert(data);
   }
 }
