@@ -26,6 +26,7 @@ export class ProductosSqlite3DAO implements ProductTestClass {
         this.connection.schema
           .createTable("productos", (productosTable) => {
             productosTable.increments();
+            productosTable.string("timestamp").notNullable();
             productosTable.string("nombre").notNullable();
             productosTable.string("descripcion").notNullable();
             productosTable.string("codigo").notNullable();
@@ -49,5 +50,12 @@ export class ProductosSqlite3DAO implements ProductTestClass {
     }
     console.log(output);
     return output;
+  }
+
+  async add(data: newProductI): Promise<ProductI> {
+    data.timestamp = moment().format();
+    this.connection("productos").insert(data);
+    console.log(data);
+    return this.connection("productos");
   }
 }

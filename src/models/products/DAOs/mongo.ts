@@ -23,12 +23,60 @@ export class ProductosAtlasDAO implements ProductBaseClass {
   private productos;
 
   constructor(local: boolean = false) {
+    const mockData = [
+      {
+        timestamp: "0000",
+        nombre: "Pizza Muzzarella",
+        descripcion: "salsa de tomate y muzarella",
+        codigo: "muzza",
+        foto: "pizza_muzza.png",
+        precio: 600,
+        stock: 200,
+      },
+      {
+        timestamp: "1111",
+        nombre: "Pizza Napolitana",
+        descripcion: "salsa de tomate, muzarella y tomates",
+        codigo: "napo",
+        foto: "pizza_napo.png",
+        precio: 750,
+        stock: 200,
+      },
+      {
+        timestamp: "2222",
+        nombre: "Pizza Anchoas",
+        descripcion: "salsa de tomate, muzarella y anchoas",
+        codigo: "anchoas",
+        foto: "pizza_anchoas.png",
+        precio: 800,
+        stock: 20,
+      },
+    ];
+
     if (local)
       this.srv = `mongodb://${Config.MONGO_LOCAL_IP}:${Config.MONGO_LOCAL_PORT}/${Config.MONGO_LOCAL_DBNAME}`;
     else
       this.srv = `mongodb+srv://${Config.MONGO_ATLAS_USER}:${Config.MONGO_ATLAS_PASSWORD}@${Config.MONGO_ATLAS_CLUSTER}/${Config.MONGO_ATLAS_DBNAME}?retryWrites=true&w=majority`;
     mongoose.connect(this.srv);
     this.productos = mongoose.model<ProductI>("producto", productsSchema);
+
+    this.productos.count({}, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        if (result == 0) {
+          console.log("Collection vacía");
+          this.productos
+            .insertMany(mockData)
+            .then(function () {
+              console.log("Mock Data Ingresada"); // Success
+            })
+            .catch(function (error) {
+              console.log(error); // Failure
+            });
+        }
+      }
+    });
   }
 
   async get(id?: string): Promise<ProductI[]> {

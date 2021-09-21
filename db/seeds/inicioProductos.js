@@ -1,6 +1,7 @@
 const initProductos = [
   {
     id: 1,
+    timestamp: "0000",
     nombre: "Pizza Muzzarella",
     descripcion: "salsa de tomate y muzarella",
     codigo: "muzza",
@@ -10,6 +11,7 @@ const initProductos = [
   },
   {
     id: 2,
+    timestamp: "1111",
     nombre: "Pizza Napolitana",
     descripcion: "salsa de tomate, muzarella y tomates",
     codigo: "napo",
@@ -19,6 +21,7 @@ const initProductos = [
   },
   {
     id: 3,
+    timestamp: "2222",
     nombre: "Pizza Anchoas",
     descripcion: "salsa de tomate, muzarella y anchoas",
     codigo: "anchoas",
