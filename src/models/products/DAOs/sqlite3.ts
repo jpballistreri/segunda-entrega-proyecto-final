@@ -17,27 +17,68 @@ export class ProductosSqlite3DAO implements ProductTestClass {
   private connection;
 
   constructor() {
+    const mockData = [
+      {
+        timestamp: "0000",
+        nombre: "Pizza Muzzarella",
+        descripcion: "salsa de tomate y muzarella",
+        codigo: "muzza",
+        foto: "pizza_muzza.png",
+        precio: 600,
+        stock: 200,
+      },
+      {
+        timestamp: "1111",
+        nombre: "Pizza Napolitana",
+        descripcion: "salsa de tomate, muzarella y tomates",
+        codigo: "napo",
+        foto: "pizza_napo.png",
+        precio: 750,
+        stock: 200,
+      },
+      {
+        timestamp: "2222",
+        nombre: "Pizza Anchoas",
+        descripcion: "salsa de tomate, muzarella y anchoas",
+        codigo: "anchoas",
+        foto: "pizza_anchoas.png",
+        precio: 800,
+        stock: 20,
+      },
+    ];
+
     const options = dbConfig[`${Config.SQLITE3_KNEX_ENV}`];
     this.connection = knex(options);
     this.connection.schema.hasTable("productos").then((exists) => {
       if (!exists) {
-        console.log("Creamos la tabla productos!");
+        console.log("Creando Tabla productos");
 
         this.connection.schema
           .createTable("productos", (productosTable) => {
             productosTable.increments();
-            productosTable.string("timestamp").notNullable();
             productosTable.string("nombre").notNullable();
             productosTable.string("descripcion").notNullable();
             productosTable.string("codigo").notNullable();
             productosTable.string("foto").notNullable();
             productosTable.decimal("precio", 14, 2).notNullable();
             productosTable.integer("stock").notNullable();
+            productosTable.string("timestamp").notNullable();
           })
           .then(() => {
             console.log("Done");
           });
       }
+
+      this.connection("productos")
+        .count()
+        .then((res) => {
+          const countResult = res[0]["count(*)"];
+          if (countResult == 0) {
+            this.connection("productos")
+              .insert(mockData)
+              .then(() => console.log("Data Mock insertada correctamente."));
+          }
+        });
     });
   }
 
@@ -48,14 +89,14 @@ export class ProductosSqlite3DAO implements ProductTestClass {
     else {
       output = this.connection("productos");
     }
-    console.log(output);
+    //console.log(output);
     return output;
   }
 
   async add(data: newProductI): Promise<ProductI> {
     data.timestamp = moment().format();
-    this.connection("productos").insert(data);
+
     console.log(data);
-    return this.connection("productos");
+    return this.connection("productos").insert(data);
   }
 }
