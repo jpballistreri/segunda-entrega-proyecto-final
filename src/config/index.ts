@@ -12,6 +12,7 @@ const venv = {
     process.env.FILE_SYSTEM_PERSISTENCIA || "url json file",
   MONGO_LOCAL_IP: process.env.MONGO_LOCAL_IP || "localhost",
   MONGO_LOCAL_PORT: process.env.MONGO_LOCAL_PORT || "27017",
+  SQLITE3_KNEX_ENV: process.env.SQLITE3_KNEX_ENV || "env de knexfile.js",
 };
 
 export default venv;
