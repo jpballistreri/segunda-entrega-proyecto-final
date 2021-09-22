@@ -14,6 +14,21 @@ module.exports = {
       directory: __dirname + "/db/seeds",
     },
   },
+  development_mysql: {
+    client: "mysql",
+    connection: {
+      host: "172.22.0.3",
+      user: "root",
+      password: "coderhouse",
+      database: "ecommerce",
+    },
+    migrations: {
+      directory: __dirname + "/db/migrations",
+    },
+    seeds: {
+      directory: __dirname + "/db/seeds",
+    },
+  },
 
   staging: {
     client: "postgresql",

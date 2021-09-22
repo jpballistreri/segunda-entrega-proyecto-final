@@ -14,10 +14,10 @@ import dbConfig from "../../../../knexfile";
 
 export class ProductosSqlite3DAO implements ProductBaseClassSql {
   //private srv: string;
-  private productos;
-  private connection;
+  //private productos;
+  private connection: any;
 
-  constructor() {
+  constructor(local: boolean = false) {
     const mockData: newProductI[] = [
       {
         timestamp: "0000",
@@ -48,14 +48,14 @@ export class ProductosSqlite3DAO implements ProductBaseClassSql {
       },
     ];
 
-    const options = dbConfig[`${Config.SQLITE3_KNEX_ENV}`];
+    const options = dbConfig[`${Config.MYSQL_KNEX_ENV}`];
     this.connection = knex(options);
-    this.connection.schema.hasTable("productos").then((exists) => {
+    this.connection.schema.hasTable("productos").then((exists: []) => {
       if (!exists) {
         console.log("Creando Tabla productos");
 
         this.connection.schema
-          .createTable("productos", (productosTable) => {
+          .createTable("productos", (productosTable: any) => {
             productosTable.increments();
             productosTable.string("nombre").notNullable();
             productosTable.string("descripcion").notNullable();
@@ -72,7 +72,7 @@ export class ProductosSqlite3DAO implements ProductBaseClassSql {
 
       this.connection("productos")
         .count()
-        .then((res) => {
+        .then((res: any) => {
           const countResult = res[0]["count(*)"];
           if (countResult == 0) {
             this.connection("productos")
@@ -99,10 +99,9 @@ export class ProductosSqlite3DAO implements ProductBaseClassSql {
 
     const insertData = async (): Promise<ProductSqlI> => {
       const id = await this.connection("productos").insert(data);
-      const insert: ProductSqlI = await this.connection("productos").where(
-        "id",
-        id
-      );
+      const insert: ProductSqlI | any = await this.connection(
+        "productos"
+      ).where("id", id);
       console.log(insert);
       return insert;
     };
@@ -113,7 +112,7 @@ export class ProductosSqlite3DAO implements ProductBaseClassSql {
   async update(id: string, data: newProductI): Promise<ProductSqlI> {
     const updateData = async (): Promise<ProductSqlI> => {
       await this.connection("productos").where("id", id).update(data);
-      const nuevoProducto: ProductSqlI = await this.connection(
+      const nuevoProducto: ProductSqlI | any = await this.connection(
         "productos"
       ).where("id", id);
 
