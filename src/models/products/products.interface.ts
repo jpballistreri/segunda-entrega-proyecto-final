@@ -51,4 +51,12 @@ export interface ProductBaseClass {
   query(options: ProductQuery): Promise<ProductI[]>;
 }
 
+export interface ProductBaseClassSql {
+  get(id?: string | undefined): Promise<ProductSqlI[]> | undefined;
+  add(data: newProductI): Promise<ProductSqlI>;
+  update(id: string, newProductData: newProductI): Promise<ProductSqlI>;
+  delete(id: string): Promise<void>;
+  query(options: ProductQuery): Promise<ProductSqlI[]>;
+}
+
 export interface ProductTestClass {}

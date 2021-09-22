@@ -2,7 +2,7 @@
 import {
   newProductI,
   ProductI,
-  ProductBaseClass,
+  ProductBaseClassSql,
   ProductQuery,
   ProductSqlI,
   ProductTestClass,
@@ -12,7 +12,7 @@ import moment from "moment";
 import knex from "knex";
 import dbConfig from "../../../../knexfile";
 
-export class ProductosSqlite3DAO implements ProductTestClass {
+export class ProductosSqlite3DAO implements ProductBaseClassSql {
   //private srv: string;
   private productos;
   private connection;
@@ -94,12 +94,12 @@ export class ProductosSqlite3DAO implements ProductTestClass {
     return output;
   }
 
-  async add(data: newProductI): Promise<ProductSqlI[]> {
+  async add(data: newProductI): Promise<ProductSqlI> {
     data.timestamp = moment().format();
 
-    const insertData = async (): Promise<ProductSqlI[]> => {
+    const insertData = async (): Promise<ProductSqlI> => {
       const id = await this.connection("productos").insert(data);
-      const insert: ProductSqlI[] = await this.connection("productos").where(
+      const insert: ProductSqlI = await this.connection("productos").where(
         "id",
         id
       );
@@ -127,7 +127,7 @@ export class ProductosSqlite3DAO implements ProductTestClass {
     await this.connection("productos").where("id", id).del();
   }
 
-  async query(options: ProductQuery): Promise<ProductSqlI[] | undefined> {
+  async query(options: ProductQuery): Promise<ProductSqlI[]> {
     let queryString = "SELECT  * from productos where ";
 
     var query = this.connection("productos");
