@@ -118,7 +118,6 @@ export class ProductosAtlasDAO implements ProductBaseClass {
     let match: any = {};
 
     if (options.nombre) {
-      console.log("nombre..");
       match.nombre = { $regex: options.nombre };
     }
 

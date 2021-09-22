@@ -122,4 +122,49 @@ export class ProductosSqlite3DAO implements ProductTestClass {
 
     return await updateData();
   }
+
+  async delete(id: string) {
+    await this.connection("productos").where("id", id).del();
+  }
+
+  async query(options: ProductQuery): Promise<ProductSqlI[] | undefined> {
+    let queryString = "SELECT  * from productos where ";
+
+    var query = this.connection("productos");
+
+    if (options.nombre) {
+      query.where("nombre", "LIKE", `%${options.nombre}%`);
+    }
+    if (options.descripcion) {
+      query.where("descripcion", "LIKE", `%${options.descripcion}%`);
+    }
+    if (options.codigo) {
+      query.where("codigo", "LIKE", `%${options.codigo}%`);
+    }
+    if (options.timestamp) {
+      query.where("timestamp", "LIKE", `%${options.timestamp}%`);
+    }
+    if (options.precioMin) {
+      query.where("precio", ">=", `${options.precioMin}`);
+    }
+    if (options.precioMax) {
+      query.where("precio", "<=", `${options.precioMax}`);
+    }
+    if (options.precio) {
+      query.where("precio", "=", `${options.precio}`);
+    }
+    if (options.stockMin) {
+      query.where("stock", ">=", `${options.stockMin}`);
+    }
+    if (options.stockMax) {
+      query.where("stock", "<=", `${options.stockMax}`);
+    }
+    if (options.stock) {
+      query.where("stock", "=", `${options.stock}`);
+    }
+
+    return query.then((results: ProductSqlI[]) => {
+      return results;
+    });
+  }
 }
