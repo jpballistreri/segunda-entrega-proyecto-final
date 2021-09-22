@@ -1,10 +1,9 @@
-import { ProductosMemDAO } from "./DAOs/memory";
-import { ProductosFSDAO } from "./DAOs/fs";
-import { ProductosAtlasDAO } from "./DAOs/mongo";
-import { ProductosSqlite3DAO } from "./DAOs/sqlite3";
+import { ProductosMemDAO } from "./DAOs/productosMemory";
+import { ProductosFSDAO } from "./DAOs/productosFs";
+import { ProductosAtlasDAO } from "./DAOs/productosMongo";
+import { ProductosSqlite3DAO } from "./DAOs/productosSqlite3";
 import Config from "../../config";
 
-import path from "path";
 export enum TipoPersistencia {
   Memoria = "MEM",
   FileSystem = "FS",
@@ -20,12 +19,7 @@ export class FactoryDAO {
     switch (tipo) {
       case TipoPersistencia.FileSystem:
         console.log("RETORNANDO INSTANCIA CLASE FS");
-        const filePath = path.resolve(
-          __dirname,
-          Config.FILE_SYSTEM_PERSISTENCIA
-        );
-        console.log(filePath);
-        return new ProductosFSDAO(filePath);
+        return new ProductosFSDAO();
 
       case TipoPersistencia.MongoAtlas:
         console.log("RETORNANDO INSTANCIA CLASE MONGO ATLAS");

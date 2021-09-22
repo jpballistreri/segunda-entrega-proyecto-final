@@ -6,13 +6,15 @@ import {
   ProductQuery,
 } from "../products.interface";
 import moment from "moment";
+import Config from "../../../config";
+import path from "path";
 
 export class ProductosFSDAO implements ProductBaseClass {
   private productos: ProductI[] = [];
   private nombreArchivo: string;
   private mockData: ProductI[] = [];
 
-  constructor(fileName: string) {
+  constructor() {
     this.mockData = [
       {
         _id: "1",
@@ -47,8 +49,10 @@ export class ProductosFSDAO implements ProductBaseClass {
     ];
 
     this.mockData.forEach((aMock) => this.productos.push(aMock));
-
-    this.nombreArchivo = fileName;
+    this.nombreArchivo = path.resolve(
+      __dirname,
+      Config.FILE_SYSTEM_PERSISTENCIA
+    );
     this.leer(this.nombreArchivo);
   }
 
@@ -64,6 +68,7 @@ export class ProductosFSDAO implements ProductBaseClass {
         this.nombreArchivo,
         JSON.stringify(this.mockData, null, "\t")
       );
+      console.log("Archivo creado.");
       this.productos = JSON.parse(await fs.promises.readFile(archivo, "utf-8"));
     }
   }
