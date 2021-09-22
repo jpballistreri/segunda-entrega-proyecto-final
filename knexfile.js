@@ -1,10 +1,12 @@
+import * as Config from "./src/config/index";
+
 // Update with your config settings.
 
 module.exports = {
   development: {
     client: "sqlite3",
     connection: {
-      filename: "./dev.sqlite3",
+      filename: `${Config.SQLITE3_DB}`,
     },
     useNullAsDefault: true,
     migrations: {

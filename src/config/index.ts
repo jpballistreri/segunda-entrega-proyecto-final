@@ -14,6 +14,7 @@ const venv = {
   MONGO_LOCAL_PORT: process.env.MONGO_LOCAL_PORT || "27017",
   SQLITE3_KNEX_ENV: process.env.SQLITE3_KNEX_ENV || "env de knexfile.js",
   MYSQL_KNEX_ENV: process.env.MYSQL_KNEX_ENV || "env de knexfile.js",
+  SQLITE3_DB: process.env.SQLITE3_DB || "./db.sqlite3",
 };
 
 export default venv;

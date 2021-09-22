@@ -10,7 +10,7 @@ import {
 import Config from "../../../config";
 import moment from "moment";
 import knex from "knex";
-import dbConfig from "../../../../knexfile";
+//import dbConfig from "../../../../knexfile";
 
 export class ProductosSqlite3DAO implements ProductBaseClassSql {
   //private srv: string;
@@ -48,7 +48,34 @@ export class ProductosSqlite3DAO implements ProductBaseClassSql {
       },
     ];
 
-    const options = dbConfig[`${Config.MYSQL_KNEX_ENV}`];
+    //const options = dbConfig[`${Config.MYSQL_KNEX_ENV}`];
+    let options = {};
+    if (local) {
+      options = {
+        client: "sqlite3",
+        connection: {
+          filename: `${Config.SQLITE3_DB}`,
+        },
+        useNullAsDefault: true,
+      };
+    } else {
+      options = {
+        client: "mysql",
+        connection: {
+          host: "172.22.0.3",
+          user: "root",
+          password: "coderhouse",
+          database: "ecommerce",
+        },
+        migrations: {
+          directory: __dirname + "/db/migrations",
+        },
+        seeds: {
+          directory: __dirname + "/db/seeds",
+        },
+      };
+    }
+
     this.connection = knex(options);
     this.connection.schema.hasTable("productos").then((exists: []) => {
       if (!exists) {
