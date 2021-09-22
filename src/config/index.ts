@@ -15,6 +15,10 @@ const venv = {
   SQLITE3_KNEX_ENV: process.env.SQLITE3_KNEX_ENV || "env de knexfile.js",
   MYSQL_KNEX_ENV: process.env.MYSQL_KNEX_ENV || "env de knexfile.js",
   SQLITE3_DB: process.env.SQLITE3_DB || "./db.sqlite3",
+  MYSQL_HOST: process.env.MYSQL_HOST || "localhost",
+  MYSQL_USER: process.env.MYSQL_USER || "root",
+  MYSQL_PASSWORD: process.env.MYSQL_PASSWORD || "pass",
+  MYSQL_DATABASE: process.env.MYSQL_DATABASE || "db_name",
 };
 
 export default venv;

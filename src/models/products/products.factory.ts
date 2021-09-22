@@ -36,11 +36,11 @@ export class FactoryDAO {
         return new ProductosAtlasDAO(true);
 
       case TipoPersistencia.SQLITE3:
-        console.log("RETORNANDO ISNTANCIA CLASE SQLITE3");
+        console.log("RETORNANDO INSTANCIA CLASE SQLITE3");
         return new ProductosSqlite3DAO(true);
 
       case TipoPersistencia.MYSQL:
-        console.log("RETORNANDO ISNTANCIA CLASE MYSQL");
+        console.log("RETORNANDO INSTANCIA CLASE MYSQL");
         return new ProductosSqlite3DAO();
 
       default:

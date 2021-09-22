@@ -10,7 +10,6 @@ import {
 import Config from "../../../config";
 import moment from "moment";
 import knex from "knex";
-//import dbConfig from "../../../../knexfile";
 
 export class ProductosSqlite3DAO implements ProductBaseClassSql {
   //private srv: string;
@@ -62,16 +61,10 @@ export class ProductosSqlite3DAO implements ProductBaseClassSql {
       options = {
         client: "mysql",
         connection: {
-          host: "172.22.0.3",
-          user: "root",
-          password: "coderhouse",
-          database: "ecommerce",
-        },
-        migrations: {
-          directory: __dirname + "/db/migrations",
-        },
-        seeds: {
-          directory: __dirname + "/db/seeds",
+          host: `${Config.MYSQL_HOST}`,
+          user: `${Config.MYSQL_USER}`,
+          password: `${Config.MYSQL_PASSWORD}`,
+          database: `${Config.MYSQL_DATABASE}`,
         },
       };
     }

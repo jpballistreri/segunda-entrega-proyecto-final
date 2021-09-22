@@ -1,12 +1,10 @@
-import * as Config from "./src/config/index";
-
 // Update with your config settings.
 
 module.exports = {
   development: {
     client: "sqlite3",
     connection: {
-      filename: `${Config.SQLITE3_DB}`,
+      filename: `./db.sqlite3`,
     },
     useNullAsDefault: true,
     migrations: {
@@ -19,9 +17,9 @@ module.exports = {
   development_mysql: {
     client: "mysql",
     connection: {
-      host: "172.22.0.3",
+      host: "localhost",
       user: "root",
-      password: "coderhouse",
+      password: "pass",
       database: "ecommerce",
     },
     migrations: {
