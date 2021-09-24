@@ -1,4 +1,5 @@
 import admin from "firebase-admin";
+
 import Config from "../../../config";
 import serviceAccount from "../../../../firebase.json";
 import {
@@ -82,6 +83,17 @@ export class ProductosFirebaseDAO implements ProductBaseClass {
 
   async get(id?: string): Promise<ProductI[]> {
     let output: ProductI[] = [];
+
+    if (id) {
+      const idRef = this.productos.doc(id);
+      const doc = await idRef.get();
+      if (!doc.exists) {
+        return [];
+      } else {
+        return [doc.data()];
+      }
+    }
+
     let resultado = await this.productos.get();
     let docs = resultado.docs;
 
@@ -103,77 +115,126 @@ export class ProductosFirebaseDAO implements ProductBaseClass {
   }
 
   async update(id: string, newProductData: newProductI): Promise<ProductI> {
-    return this.productos.findByIdAndUpdate(id, newProductData);
+    await this.productos.doc(id).set(newProductData);
+
+    const idRef = await this.productos.doc(id);
+    const doc = await idRef.get();
+
+    return await doc.data();
   }
 
   async delete(id: string) {
-    await this.productos.findByIdAndDelete(id);
+    await this.productos.doc(id).delete();
   }
   async query(options: ProductQuery): Promise<ProductI[]> {
+    //FALTA CASE SENSITIVE
     let query: ProductQuery = {};
 
     let match: any = {};
 
     if (options.nombre) {
-      match.nombre = { $regex: options.nombre };
+      console.log(options.nombre);
+
+      let resultado = await this.productos
+        .where("nombre", "==", options.nombre)
+        .get();
+
+      const fin: any = [];
+      resultado.forEach((doc) => {
+        console.log("llop");
+        console.log(doc.id, "=>", doc.data());
+        fin.push(doc.data());
+      });
+      return fin;
     }
 
-    if (options.descripcion) {
-      match.descripcion = { $regex: options.descripcion };
-    }
+    //if (options.descripcion) {
+    //  match.descripcion = { $regex: options.descripcion };
+    //}
 
     if (options.codigo) {
-      match.codigo = { $regex: options.codigo };
+      //.where("nombre", "==", "Pizza Napolitana")
+      const fin: any = [];
+      const resultado = await this.productos
+        .where("codigo", "==", options.codigo)
+        .get();
+
+      resultado.forEach((doc) => {
+        fin.push(doc.data());
+      });
+      return fin;
     }
 
-    if (options.timestamp) {
-      match.timestamp = { $regex: options.timestamp };
-    }
+    //if (options.timestamp) {
+    //  match.timestamp = { $regex: options.timestamp };
+    //}
 
     if (options.precioMin) {
-      if (!match.precio) {
-        match.precio = { $gte: options.precioMin };
-      } else {
-        match.precio["$gte"] = options.precioMin;
-      }
+      const fin: any = [];
+      const resultado = await this.productos
+        .where("precio", ">", options.precioMin)
+        .get();
+      resultado.forEach((doc) => {
+        fin.push(doc.data());
+      });
+      return fin;
     }
 
     if (options.precioMax) {
-      if (!match.precio) {
-        match.precio = { $lte: options.precioMax };
-      } else {
-        match.precio["$lte"] = options.precioMax;
-      }
+      const fin: any = [];
+      const resultado = await this.productos
+        .where("precio", "<", options.precioMax)
+        .get();
+      resultado.forEach((doc) => {
+        fin.push(doc.data());
+      });
+      return fin;
     }
 
     if (options.precio) {
-      match.precio = options.precio;
+      const fin: any = [];
+      const resultado = await this.productos
+        .where("precio", "==", options.precio)
+        .get();
+      resultado.forEach((doc) => {
+        fin.push(doc.data());
+      });
+      return fin;
     }
 
     if (options.stockMin) {
-      if (!match.stock) {
-        match.stock = { $gte: options.stockMin };
-      } else {
-        match.stock["$gte"] = options.stockMin;
-      }
+      const fin: any = [];
+      const resultado = await this.productos
+        .where("stock", ">", options.stockMin)
+        .get();
+      resultado.forEach((doc) => {
+        fin.push(doc.data());
+      });
+      return fin;
     }
 
     if (options.stockMax) {
-      if (!match.stock) {
-        match.stock = { $lte: options.stockMax };
-      } else {
-        match.stock["$lte"] = options.stockMax;
-      }
+      const fin: any = [];
+      const resultado = await this.productos
+        .where("stock", "<", options.stockMax)
+        .get();
+      resultado.forEach((doc) => {
+        fin.push(doc.data());
+      });
+      return fin;
     }
 
     if (options.stock) {
-      match.stock = options.stock;
+      const fin: any = [];
+      const resultado = await this.productos
+        .where("stock", "==", options.stock)
+        .get();
+      resultado.forEach((doc) => {
+        fin.push(doc.data());
+      });
+      return fin;
     }
 
-    return this.productos.aggregate([
-      {
-        $match: match,
-      },
-    ]);
+    return [];
   }
 }
