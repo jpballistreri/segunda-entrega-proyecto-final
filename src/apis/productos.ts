@@ -10,7 +10,7 @@ import { ProductQuery } from "../models/products/products.interface";
 /**
  * Con esta variable elegimos el tipo de persistencia
  */
-const tipo = TipoPersistencia.SQLITE3;
+const tipo = TipoPersistencia.Firebase;
 
 class prodAPI {
   private productos;

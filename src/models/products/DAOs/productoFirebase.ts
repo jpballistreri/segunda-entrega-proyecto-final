@@ -1,28 +1,32 @@
-import mongoose from "mongoose";
+import admin from "firebase-admin";
+import Config from "../../../config";
+import serviceAccount from "../../../../firebase.json";
 import {
   newProductI,
   ProductI,
-  ProductBaseClass,
+  ProductBaseClassSql,
   ProductQuery,
+  ProductSqlI,
+  ProductBaseClass,
 } from "../products.interface";
-import Config from "../../../config";
 import moment from "moment";
 
-const productsSchema = new mongoose.Schema<ProductI>({
-  timestamp: String,
-  nombre: String,
-  descripcion: String,
-  codigo: String,
-  foto: String,
-  precio: Number,
-  stock: Number,
-});
+const params = {
+  type: serviceAccount.type,
+  projectId: serviceAccount.project_id,
+  privateKeyId: serviceAccount.private_key_id,
+  privateKey: serviceAccount.private_key,
+  clientEmail: serviceAccount.client_email,
+  clientId: serviceAccount.client_id,
+  authUri: serviceAccount.auth_uri,
+  tokenUri: serviceAccount.token_uri,
+  authProviderX509CertUrl: serviceAccount.auth_provider_x509_cert_url,
+  clientC509CertUrl: serviceAccount.client_x509_cert_url,
+};
 
-export class ProductosAtlasDAO implements ProductBaseClass {
-  private srv: string;
+export class ProductosFirebaseDAO implements ProductBaseClass {
   private productos;
-
-  constructor(local: boolean = false) {
+  constructor() {
     const mockData = [
       {
         timestamp: "0000",
@@ -52,56 +56,50 @@ export class ProductosAtlasDAO implements ProductBaseClass {
         stock: 20,
       },
     ];
-
-    if (local)
-      this.srv = `mongodb://${Config.MONGO_LOCAL_IP}:${Config.MONGO_LOCAL_PORT}/${Config.MONGO_LOCAL_DBNAME}`;
-    else
-      this.srv = `mongodb+srv://${Config.MONGO_ATLAS_USER}:${Config.MONGO_ATLAS_PASSWORD}@${Config.MONGO_ATLAS_CLUSTER}/${Config.MONGO_ATLAS_DBNAME}?retryWrites=true&w=majority`;
-    mongoose.connect(this.srv);
-    this.productos = mongoose.model<ProductI>("producto", productsSchema);
-
-    this.productos.count({}, (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        if (result == 0) {
-          console.log("Collection vacía");
-          this.productos
-            .insertMany(mockData)
-            .then(function () {
-              console.log("Mock Data Ingresada"); // Success
-            })
-            .catch(function (error) {
-              console.log(error); // Failure
-            });
-        }
-      }
+    admin.initializeApp({
+      credential: admin.credential.cert(params),
     });
+    const db = admin.firestore();
+    this.productos = db.collection("productos");
+
+    (async () => {
+      try {
+        const resultado = await this.productos.get();
+        let docs = resultado.docs;
+        if (docs.length == 0) {
+          console.log("Collection vacía");
+          console.log("Cargando Mock Data");
+          mockData.forEach(async (obj) => {
+            const newDoc = this.productos.doc();
+            await newDoc.create(obj);
+          });
+        }
+      } catch (err) {
+        console.log(`Error ${err}`);
+      }
+    })();
   }
 
   async get(id?: string): Promise<ProductI[]> {
     let output: ProductI[] = [];
-    try {
-      if (id) {
-        const document = await this.productos.findById(id);
-        if (document) output.push(document);
-      } else {
-        output = await this.productos.find();
-      }
+    let resultado = await this.productos.get();
+    let docs = resultado.docs;
 
-      return output;
-    } catch (err) {
-      return output;
-    }
+    output = docs.map((aDoc) => ({
+      id: aDoc.id,
+      data: aDoc.data(),
+    }));
+
+    return output;
   }
-
   async add(data: newProductI): Promise<ProductI> {
     if (!data.nombre || !data.precio) throw new Error("invalid data");
     data.timestamp = moment().format();
-    const newProduct = this.productos(data);
-    await newProduct.save();
+    const newDoc = this.productos.doc();
+    await newDoc.create(data);
+    console.log();
 
-    return newProduct;
+    return newDoc;
   }
 
   async update(id: string, newProductData: newProductI): Promise<ProductI> {
@@ -111,7 +109,6 @@ export class ProductosAtlasDAO implements ProductBaseClass {
   async delete(id: string) {
     await this.productos.findByIdAndDelete(id);
   }
-
   async query(options: ProductQuery): Promise<ProductI[]> {
     let query: ProductQuery = {};
 

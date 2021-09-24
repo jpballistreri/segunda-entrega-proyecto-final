@@ -19,6 +19,7 @@ const venv = {
   MYSQL_USER: process.env.MYSQL_USER || "root",
   MYSQL_PASSWORD: process.env.MYSQL_PASSWORD || "pass",
   MYSQL_DATABASE: process.env.MYSQL_DATABASE || "db_name",
+  FIREBASE_KEY: process.env.FIREBASE_KEY || "private_key.json",
 };
 
 export default venv;

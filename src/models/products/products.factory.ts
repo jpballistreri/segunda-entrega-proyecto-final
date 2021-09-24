@@ -2,6 +2,7 @@ import { ProductosMemDAO } from "./DAOs/productosMemory";
 import { ProductosFSDAO } from "./DAOs/productosFs";
 import { ProductosAtlasDAO } from "./DAOs/productosMongo";
 import { ProductosSqlite3DAO } from "./DAOs/productosSqlite3";
+import { ProductosFirebaseDAO } from "./DAOs/productoFirebase";
 import Config from "../../config";
 
 export enum TipoPersistencia {
@@ -36,6 +37,10 @@ export class FactoryDAO {
       case TipoPersistencia.MYSQL:
         console.log("RETORNANDO INSTANCIA CLASE MYSQL");
         return new ProductosSqlite3DAO();
+
+      case TipoPersistencia.Firebase:
+        console.log("RETORNANDO INSTANCIA CLASE FIREBASE");
+        return new ProductosFirebaseDAO();
 
       default:
         console.log("RETORNANDO INSTANCIA CLASE MEMORIA");

@@ -5,7 +5,6 @@ import {
   ProductBaseClassSql,
   ProductQuery,
   ProductSqlI,
-  ProductTestClass,
 } from "../products.interface";
 import Config from "../../../config";
 import moment from "moment";
