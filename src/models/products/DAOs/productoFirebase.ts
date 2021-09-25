@@ -83,6 +83,7 @@ export class ProductosFirebaseDAO implements ProductBaseClass {
 
   async get(id?: string): Promise<ProductI[]> {
     let output: ProductI[] = [];
+    let doc: ProductI;
 
     if (id) {
       const idRef = this.productos.doc(id);
@@ -90,7 +91,9 @@ export class ProductosFirebaseDAO implements ProductBaseClass {
       if (!doc.exists) {
         return [];
       } else {
-        return [doc.data()];
+        let data = doc.data();
+        data.id = id;
+        return [data];
       }
     }
 
