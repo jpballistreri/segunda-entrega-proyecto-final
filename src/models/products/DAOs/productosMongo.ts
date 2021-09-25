@@ -98,7 +98,7 @@ export class ProductosAtlasDAO implements ProductBaseClass {
   async add(data: newProductI): Promise<ProductI> {
     if (!data.nombre || !data.precio) throw new Error("invalid data");
     data.timestamp = moment().format();
-    const newProduct = this.productos(data);
+    const newProduct = new this.productos(data);
     await newProduct.save();
 
     return newProduct;
