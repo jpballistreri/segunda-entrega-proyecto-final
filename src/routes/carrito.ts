@@ -1,21 +1,22 @@
-import { Router } from 'express';
+import { Router } from "express";
+import { cartController } from "../controllers/carrito";
+import { checkAdmin } from "../middleware/admin";
+import asyncHandler from "express-async-handler";
 
 const router = Router();
 
-router.get('/', (req, res) => {
-  res.json('GET A CARRITO');
+router.get("/", asyncHandler(cartController.getProducts));
+
+router.post("/", (req, res) => {
+  res.json("POST A CARRITO");
 });
 
-router.post('/', (req, res) => {
-  res.json('POST A CARRITO');
+router.put("/", (req, res) => {
+  res.json("PUT A CARRITO");
 });
 
-router.put('/', (req, res) => {
-  res.json('PUT A CARRITO');
-});
-
-router.delete('/', (req, res) => {
-  res.json('DELETE A CARRITO');
+router.delete("/", (req, res) => {
+  res.json("DELETE A CARRITO");
 });
 
 export default router;

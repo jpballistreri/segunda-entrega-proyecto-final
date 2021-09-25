@@ -3,18 +3,16 @@ import {
   ProductI,
   ProductSqlI,
 } from "../models/products/products.interface";
-import {
-  FactoryDAO,
-  TipoPersistencia,
-} from "../models/products/products.factory";
+import { FactoryDAO } from "../models/cart/cart.factory";
+import { TipoPersistencia } from "../models/cart/cart.factory";
 import { ProductQuery } from "../models/products/products.interface";
 
 /**
  * Con esta variable elegimos el tipo de persistencia
  */
-const tipo = TipoPersistencia.MongoAtlas;
+const tipo = TipoPersistencia.Memoria;
 
-class prodAPI {
+class cartAPI {
   private productos;
 
   constructor() {
@@ -24,7 +22,10 @@ class prodAPI {
   async getProducts(
     id: string | undefined = undefined
   ): Promise<ProductI[] | ProductSqlI[]> {
-    if (id) return this.productos.get(id);
+    if (id) {
+      console.log(id);
+      return this.productos.get(id);
+    }
 
     return this.productos.get();
   }
@@ -32,11 +33,6 @@ class prodAPI {
   async addProduct(productData: newProductI): Promise<ProductI | ProductSqlI> {
     const newProduct = await this.productos.add(productData);
     return newProduct;
-  }
-
-  async updateProduct(id: string, productData: newProductI) {
-    const updatedProduct = await this.productos.update(id, productData);
-    return updatedProduct;
   }
 
   async deleteProduct(id: string) {
@@ -48,4 +44,4 @@ class prodAPI {
   }
 }
 
-export const productsAPI = new prodAPI();
+export const cartApi = new cartAPI();

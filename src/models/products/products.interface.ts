@@ -43,8 +43,25 @@ export interface ProductQuery {
   stockMax?: number;
 }
 
+export interface ProductoCarrito {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  codigo: string;
+  foto: string;
+  precio: number | string;
+  stock: number;
+  timestamp: string;
+}
+
+export interface Carrito {
+  id: number;
+  timestamp: string;
+  producto: Array<ProductoCarrito>;
+}
+
 export interface ProductBaseClass {
-  get(id?: string | undefined): Promise<ProductI[]> | undefined;
+  get(id?: string): Promise<ProductI[]>;
   add(data: newProductI): Promise<ProductI>;
   update(id: string, newProductData: newProductI): Promise<ProductI>;
   delete(id: string): Promise<void>;
@@ -52,9 +69,16 @@ export interface ProductBaseClass {
 }
 
 export interface ProductBaseClassSql {
-  get(id?: string | undefined): Promise<ProductSqlI[]> | undefined;
+  get(id?: string): Promise<ProductSqlI[]>;
   add(data: newProductI): Promise<ProductSqlI>;
   update(id: string, newProductData: newProductI): Promise<ProductSqlI>;
   delete(id: string): Promise<void>;
   query(options: ProductQuery): Promise<ProductSqlI[]>;
+}
+
+export interface CarritoBaseClass {
+  get(id?: string): Promise<ProductI[]>;
+  //add(data: newProductI): Promise<ProductSqlI>;
+  //delete(id: string): Promise<void>;
+  //query(options: ProductQuery): Promise<ProductSqlI[]>;
 }
