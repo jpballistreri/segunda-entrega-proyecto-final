@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { cartApi } from "../apis/carrito";
+import { productsAPI } from "../apis/productos";
 import { ProductQuery } from "../models/products/products.interface";
 
 class Carrito {
@@ -87,11 +88,12 @@ class Carrito {
   }
 
   async addProducts(req: Request, res: Response) {
-    const newItem = await cartApi.addProduct(req.body);
-
+    const producto = await productsAPI.getProducts(req.params.id);
+    console.log(producto);
+    const newProduct = await cartApi.addProduct(producto);
     res.json({
       msg: "producto agregado con exito",
-      data: newItem,
+      data: newProduct,
     });
   }
 

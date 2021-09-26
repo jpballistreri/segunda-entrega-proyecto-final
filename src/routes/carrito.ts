@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { cartController } from "../controllers/carrito";
+import { productsController } from "../controllers/productos";
 import { checkAdmin } from "../middleware/admin";
 import asyncHandler from "express-async-handler";
 
@@ -13,9 +14,12 @@ router.get(
   asyncHandler(cartController.getProducts)
 );
 
-router.post("/", (req, res) => {
-  res.json("POST A CARRITO");
-});
+router.post(
+  "/:id",
+  productsController.checkProductExists,
+
+  asyncHandler(cartController.addProducts)
+);
 
 router.put("/", (req, res) => {
   res.json("PUT A CARRITO");

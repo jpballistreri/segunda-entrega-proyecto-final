@@ -24,7 +24,9 @@ class prodAPI {
   async getProducts(
     id: string | undefined = undefined
   ): Promise<ProductI[] | ProductSqlI[]> {
-    if (id) return this.productos.get(id);
+    if (id) {
+      return await this.productos.get(id);
+    }
 
     return this.productos.get();
   }

@@ -5,6 +5,7 @@ import {
   ProductQuery,
 } from "../../products/products.interface";
 import moment from "moment";
+import { productsAPI } from "../../../apis/productos";
 
 export class CarritoMemDAO implements CarritoBaseClass {
   private productos: ProductI[] = [];
@@ -64,34 +65,55 @@ export class CarritoMemDAO implements CarritoBaseClass {
     return this.productos;
   }
 
-  //async add(data: newProductI): Promise<ProductI> {
-  //  if (
-  //    !data.nombre ||
-  //    !data.descripcion ||
-  //    !data.codigo ||
-  //    !data.foto ||
-  //    !data.precio ||
-  //    !data.stock ||
-  //    typeof data.nombre !== "string" ||
-  //    isNaN(data.precio)
-  //  )
-  //    throw new Error("invalid data");
-  //
-  //  const newItem: ProductI = {
-  //    _id: ((await this.findLastId()) + 1).toString(),
+  //async add(id: number) {
+  //  const producto = productsStorage.get(id)[0];
+  //  console.log("Agregando producto al carrito");
+  //  const newItem = {
+  //    id: carrito.producto.length + 1,
   //    timestamp: moment().format(),
-  //    nombre: data.nombre,
-  //    descripcion: data.descripcion,
-  //    codigo: data.codigo,
-  //    foto: data.foto,
-  //    precio: data.precio,
-  //    stock: data.stock,
+  //    nombre: producto.nombre,
+  //    descripcion: producto.descripcion,
+  //    codigo: producto.codigo,
+  //    foto: producto.foto,
+  //    precio: producto.precio,
+  //    stock: producto.stock,
   //  };
   //
-  //  this.productos.push(newItem);
-  //
+  //  carrito.producto.push(newItem);
   //  return newItem;
   //}
+
+  async add(newProduct: ProductI): Promise<ProductI> {
+    console.log("newww");
+    console.log(newProduct);
+    //if (
+    //  !data.nombre ||
+    //  !data.descripcion ||
+    //  !data.codigo ||
+    //  !data.foto ||
+    //  !data.precio ||
+    //  !data.stock ||
+    //  typeof data.nombre !== "string" ||
+    //  isNaN(data.precio)
+    //)
+    //  throw new Error("invalid data");
+
+    //const newItem: ProductI = {
+    //  _id: ((await this.findLastId()) + 1).toString(),
+    //  timestamp: moment().format(),
+    //  nombre: data.nombre,
+    //  descripcion: data.descripcion,
+    //  codigo: data.codigo,
+    //  foto: data.foto,
+    //  precio: data.precio,
+    //  stock: data.stock,
+    //};
+    //console.log(id);
+    console.log("Agregando producto al carrito");
+    this.productos.push(newProduct);
+
+    return newProduct;
+  }
 
   //async delete(id: string): Promise<void> {
   //  const index = await this.findIndex(id);

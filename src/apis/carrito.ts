@@ -6,6 +6,7 @@ import {
 import { FactoryDAO } from "../models/cart/cart.factory";
 import { TipoPersistencia } from "../models/cart/cart.factory";
 import { ProductQuery } from "../models/products/products.interface";
+import { productsAPI } from "./productos";
 
 /**
  * Con esta variable elegimos el tipo de persistencia
@@ -29,9 +30,10 @@ class cartAPI {
     return this.productos.get();
   }
 
-  async addProduct(productData: newProductI): Promise<ProductI | ProductSqlI> {
-    const newProduct = await this.productos.add(productData);
-    return newProduct;
+  async addProduct(
+    producto: ProductI[] | ProductSqlI[]
+  ): Promise<ProductI | ProductSqlI> {
+    return this.productos.add(producto);
   }
 
   async deleteProduct(id: string) {
