@@ -89,7 +89,6 @@ class Carrito {
 
   async addProducts(req: Request, res: Response) {
     const producto = await productsAPI.getProducts(req.params.id);
-    console.log(producto);
     const newProduct = await cartApi.addProduct(producto);
     res.json({
       msg: "producto agregado con exito",

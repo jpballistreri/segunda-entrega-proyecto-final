@@ -17,16 +17,13 @@ router.get(
 router.post(
   "/:id",
   productsController.checkProductExists,
-
   asyncHandler(cartController.addProducts)
 );
 
-router.put("/", (req, res) => {
-  res.json("PUT A CARRITO");
-});
-
-router.delete("/", (req, res) => {
-  res.json("DELETE A CARRITO");
-});
+router.delete(
+  "/:id",
+  asyncHandler(cartController.checkProductExists),
+  asyncHandler(cartController.deleteProducts)
+);
 
 export default router;
