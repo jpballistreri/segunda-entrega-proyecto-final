@@ -58,10 +58,8 @@ export class CarritoMemDAO implements CarritoBaseClass {
   }
 
   async get(id?: string): Promise<ProductI[]> {
-    console.log("gettt");
-    console.log(id);
     if (id) {
-      return this.productos.filter((aProduct) => aProduct._id === id);
+      return this.productos.filter((aProduct) => aProduct._id == id);
     }
     return this.productos;
   }

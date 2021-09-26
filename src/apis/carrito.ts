@@ -23,7 +23,6 @@ class cartAPI {
     id: string | undefined = undefined
   ): Promise<ProductI[] | ProductSqlI[]> {
     if (id) {
-      console.log(id);
       return this.productos.get(id);
     }
 

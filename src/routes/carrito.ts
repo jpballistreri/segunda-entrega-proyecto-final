@@ -7,6 +7,12 @@ const router = Router();
 
 router.get("/", asyncHandler(cartController.getProducts));
 
+router.get(
+  "/:id",
+  cartController.checkProductExists,
+  asyncHandler(cartController.getProducts)
+);
+
 router.post("/", (req, res) => {
   res.json("POST A CARRITO");
 });
