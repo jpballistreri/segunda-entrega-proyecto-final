@@ -65,8 +65,9 @@ export class CarritoMemDAO implements CarritoBaseClass {
     return this.productos;
   }
 
-  async add(newProduct: ProductI[]): Promise<ProductI> {
+  async add(newProduct: ProductI): Promise<ProductI> {
     //console.log("Agregando producto al carrito");
+    console.log(newProduct);
     this.productos.push(newProduct[0]);
     return newProduct[0];
   }

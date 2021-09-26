@@ -78,7 +78,7 @@ export interface ProductBaseClassSql {
 
 export interface CarritoBaseClass {
   get(id?: string): Promise<ProductI[]>;
-  //add(data: newProductI): Promise<ProductSqlI>;
-  //delete(id: string): Promise<void>;
-  //query(options: ProductQuery): Promise<ProductSqlI[]>;
+  add(data: ProductI): Promise<ProductI>;
+  delete(id: string): Promise<void>;
+  query(options: ProductQuery): Promise<ProductI[]>;
 }
