@@ -8,11 +8,9 @@ import {
   TipoPersistencia,
 } from "../models/products/products.factory";
 import { ProductQuery } from "../models/products/products.interface";
+import Config from "../config";
 
-/**
- * Con esta variable elegimos el tipo de persistencia
- */
-const tipo = TipoPersistencia.MongoAtlas;
+const tipo = `${Config.TIPO_PERSISTENCIA_PRODUCTOS}`;
 
 class prodAPI {
   private productos;

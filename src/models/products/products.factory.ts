@@ -16,7 +16,7 @@ export enum TipoPersistencia {
 }
 
 export class FactoryDAO {
-  static get(tipo: TipoPersistencia) {
+  static get(tipo: String) {
     console.log("PRODUCTOS");
     switch (tipo) {
       case TipoPersistencia.FileSystem:

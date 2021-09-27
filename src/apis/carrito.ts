@@ -7,11 +7,9 @@ import { FactoryDAO } from "../models/cart/cart.factory";
 import { TipoPersistencia } from "../models/cart/cart.factory";
 import { ProductQuery } from "../models/products/products.interface";
 import { productsAPI } from "./productos";
+import Config from "../config";
 
-/**
- * Con esta variable elegimos el tipo de persistencia
- */
-const tipo = TipoPersistencia.MongoAtlas;
+const tipo = `${Config.TIPO_PERSISTENCIA_CARRITO}`;
 
 class cartAPI {
   private productos;

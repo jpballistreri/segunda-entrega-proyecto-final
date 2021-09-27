@@ -20,6 +20,12 @@ const venv = {
   MYSQL_PASSWORD: process.env.MYSQL_PASSWORD || "pass",
   MYSQL_DATABASE: process.env.MYSQL_DATABASE || "db_name",
   FIREBASE_KEY: process.env.FIREBASE_KEY || "private_key.json",
+  TIPO_PERSISTENCIA_PRODUCTOS:
+    process.env.TIPO_PERSISTENCIA_PRODUCTOS ||
+    "MEM, FS, MYSQL, SQLITE3, LOCAL-MONGO, MONGO-ATLAS, FIREBASE",
+  TIPO_PERSISTENCIA_CARRITO:
+    process.env.TIPO_PERSISTENCIA_CARRITO ||
+    "MEM, FS, MYSQL, SQLITE3, LOCAL-MONGO, MONGO-ATLAS, FIREBASE",
 };
 
 export default venv;
