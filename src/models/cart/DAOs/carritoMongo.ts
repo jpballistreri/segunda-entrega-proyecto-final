@@ -126,58 +126,71 @@ export class CarritoMongoDAO implements CarritoBaseClass {
   }
 
   async query(options: ProductQuery): Promise<ProductI[]> {
-    type Conditions = (aProduct: ProductI) => boolean;
-    const query: Conditions[] = [];
+    let query: ProductQuery = {};
+
+    let match: any = {};
 
     if (options.nombre) {
-      let nombre = options.nombre;
-      query.push((aProduct: ProductI) => aProduct.nombre.includes(nombre));
+      match.nombre = { $regex: options.nombre };
     }
 
     if (options.descripcion) {
-      let descripcion = options.descripcion;
-      query.push((aProduct: ProductI) =>
-        aProduct.descripcion.includes(descripcion)
-      );
-    }
-
-    if (options.timestamp) {
-      let timestamp = options.timestamp;
-      query.push((aProduct: ProductI) =>
-        aProduct.timestamp.includes(timestamp)
-      );
+      match.descripcion = { $regex: options.descripcion };
     }
 
     if (options.codigo) {
-      let codigo = options.codigo;
-      query.push((aProduct: ProductI) => aProduct.codigo.includes(codigo));
+      match.codigo = { $regex: options.codigo };
     }
 
-    if (options.precio)
-      query.push((aProduct: ProductI) => aProduct.precio == options.precio);
+    if (options.timestamp) {
+      match.timestamp = { $regex: options.timestamp };
+    }
 
     if (options.precioMin) {
-      let precioMin = options.precioMin;
-      query.push((aProduct: ProductI) => aProduct.precio >= precioMin);
+      if (!match.precio) {
+        match.precio = { $gte: options.precioMin };
+      } else {
+        match.precio["$gte"] = options.precioMin;
+      }
     }
 
     if (options.precioMax) {
-      let precioMax = options.precioMax;
-      query.push((aProduct: ProductI) => aProduct.precio <= precioMax);
+      if (!match.precio) {
+        match.precio = { $lte: options.precioMax };
+      } else {
+        match.precio["$lte"] = options.precioMax;
+      }
     }
-    if (options.stock)
-      query.push((aProduct: ProductI) => aProduct.stock == options.stock);
+
+    if (options.precio) {
+      match.precio = options.precio;
+    }
 
     if (options.stockMin) {
-      let stockMin = options.stockMin;
-      query.push((aProduct: ProductI) => aProduct.stock >= stockMin);
+      if (!match.stock) {
+        match.stock = { $gte: options.stockMin };
+      } else {
+        match.stock["$gte"] = options.stockMin;
+      }
     }
 
     if (options.stockMax) {
-      let stockMax = options.stockMax;
-      query.push((aProduct: ProductI) => aProduct.stock >= stockMax);
+      if (!match.stock) {
+        match.stock = { $lte: options.stockMax };
+      } else {
+        match.stock["$lte"] = options.stockMax;
+      }
     }
 
-    return this.productos.filter((aProduct) => query.every((x) => x(aProduct)));
+    if (options.stock) {
+      match.stock = options.stock;
+    }
+    const carrito = await this.productos.findById(this.id_hardcodeado);
+
+    return this.productos.aggregate([
+      {
+        $match: match,
+      },
+    ]);
   }
 }
