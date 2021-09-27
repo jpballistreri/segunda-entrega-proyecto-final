@@ -80,5 +80,4 @@ export interface CarritoBaseClass {
   get(id?: string): Promise<ProductI[]>;
   add(data: ProductI): Promise<ProductI>;
   delete(id: string): Promise<void>;
-  query(options: ProductQuery): Promise<ProductI[]>;
 }
