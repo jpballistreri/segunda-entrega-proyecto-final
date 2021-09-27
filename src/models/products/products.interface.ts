@@ -44,7 +44,7 @@ export interface ProductQuery {
 }
 
 export interface ProductoCarrito {
-  id: number;
+  _id: number;
   nombre: string;
   descripcion: string;
   codigo: string;
@@ -55,9 +55,9 @@ export interface ProductoCarrito {
 }
 
 export interface Carrito {
-  id: number;
+  _id?: number;
   timestamp: string;
-  producto: Array<ProductoCarrito>;
+  producto: ProductI[];
 }
 
 export interface ProductBaseClass {

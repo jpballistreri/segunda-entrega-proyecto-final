@@ -1,5 +1,6 @@
 //import { CarritoAtlasDAO } from "./DAOs/carritoMongo";
 import { CarritoMemDAO } from "./DAOs/carritoMemory";
+import { CarritoMongoDAO } from "./DAOs/carritoMongo";
 
 import Config from "../../config";
 
@@ -21,13 +22,13 @@ export class FactoryDAO {
       //  console.log("RETORNANDO INSTANCIA CLASE FS");
       //  return new ProductosFSDAO();
 
-      //case TipoPersistencia.MongoAtlas:
-      //  console.log("RETORNANDO INSTANCIA CLASE MONGO ATLAS");
-      //  return new CarritoAtlasDAO();
-      //
+      case TipoPersistencia.MongoAtlas:
+        console.log("RETORNANDO INSTANCIA CLASE MONGO ATLAS");
+        return new CarritoMongoDAO();
+
       //case TipoPersistencia.LocalMongo:
       //  console.log("RETORNANDO INSTANCIA CLASE MONGO LOCAL");
-      //  return new CarritoAtlasDAO(true);
+      //  return new CarritoMongoDAO(true);
 
       //case TipoPersistencia.SQLITE3:
       //  console.log("RETORNANDO INSTANCIA CLASE SQLITE3");
